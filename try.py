@@ -91,6 +91,7 @@ import time
 # while True:
 #     pass
 
-dicti = {'m123': 2, 'm5641': 3}
+# dicti = {'m123': 2, 'm5641': 3}
 
-print(dicti[0])
+# print(dicti[0])
+
