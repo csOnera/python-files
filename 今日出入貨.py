@@ -1,4 +1,4 @@
-# version 2: fixed bug about tdy exporting yesterdays stock (which will minus the stock of yesterdays) => date >= 
+# version 2: fixed bug about tdy exporting yesterdays stock (which will minus the stock of yesterdays) => one more check in tmrs export and add back to todaysStock list
 
 import mysql.connector
 import os
