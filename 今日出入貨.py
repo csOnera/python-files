@@ -1,3 +1,5 @@
+# version 2: fixed bug about tdy exporting yesterdays stock (which will minus the stock of yesterdays) => date >= 
+
 import mysql.connector
 import os
 
@@ -40,6 +42,18 @@ def printing(date, determinator):
     """.format(date))
     exportTotalNum = cursor.fetchall()[0][0]
 
+    # add tmrexportRecords
+    cursor.execute("""
+        select id, 型號, 發票, 數量, 去處, price from `exportRecord`
+        where `日期` > {};
+    """.format(date))
+    tmrExportRecords = cursor.fetchall()
+
+    for item in tmrExportRecords:
+        if item[2] in todaysInvoice:
+            todaysStock.append(item)
+
+
     if list == []:
         print(f'{"今日" if determinator == 1 else "昨日"}未有出貨\n')
     else:
@@ -63,9 +77,9 @@ def printing(date, determinator):
         """)
         lotNum = cursor.fetchall()[0][0]
         if lotNum == 0:
-            print("該訂單已歸零: " + str(lot))
+            print("該訂單現已歸零: " + str(lot))
         else:
-            print(str(lot) + "還剩" + str(lotNum))
+            print(str(lot) + "現還剩" + str(lotNum))
 
     print("\n========================================================\n")
 
@@ -73,13 +87,13 @@ def printing(date, determinator):
     # 退貨
     cursor.execute("""
         select 型號, 入貨單號, backNum, 出貨單號, new_refId from `退貨紀錄`
-        where `input_date` = {};
+        where `input_date` >= {};
     """.format(date))
     list = cursor.fetchall()
 
     cursor.execute("""
         select sum(`backNum`) from `退貨紀錄`
-        where `input_date` = {};
+        where `input_date` >= {};
     """.format(date))
     exportTotalNum = cursor.fetchall()[0][0]
 
