@@ -1,3 +1,6 @@
+# ran twice for 批發單
+# third time to add sources and exportPlace
+
 import openpyxl
 import re
 
@@ -49,7 +52,8 @@ def invoicemaker(num):
     n = len(str(num))
     return "CS" + "0"*(3-n) + str(num)
 
-
+def getInvoice():
+    pass
 
 # print(list(invoiceList[0][0])[0])
 print(invoiceList)
@@ -137,7 +141,7 @@ for k in range(len(invoiceList)):
 
 
 
-    template.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\批發做單\onera to cs invoiceAgain\\" + makeUpInvoice + '.xlsx')
+    template.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\批發做單\onera to cs invoiceWithDetails\\" + makeUpInvoice + '.xlsx')
 
     # break
 
