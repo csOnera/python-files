@@ -41,19 +41,26 @@ def findUpNDown(i):
 def giveRowInfo(row, jork):
     ref = csWs['d'+ str(row)].value
     cost = csWs['h'+ str(row)].value
+    invoice = getInvoice(row)
+    go = csWs[jork+ str(row)].value
     if re.search('-\d+', str(csWs[jork+ str(row)].value)) == None:
         num =  csWs['e'+ str(row)].value
     else:
         num = re.search('-\d+', csWs[jork+ str(row)].value).group()[1:]
 
-    return [ref,cost,num]
+    return [ref,cost,num, invoice, go]
 
 def invoicemaker(num):
     n = len(str(num))
     return "CS" + "0"*(3-n) + str(num)
 
-def getInvoice():
-    pass
+def getInvoice(row):
+    checkingRow = row
+    while True:
+        if csWs['b' + str(checkingRow)].value != None:
+            return csWs['b' + str(checkingRow - 1)].value
+        else:
+            checkingRow -= 1
 
 # print(list(invoiceList[0][0])[0])
 print(invoiceList)
@@ -85,7 +92,7 @@ for k in range(len(invoiceList)):
                 #     print(csWs['k'+ str(i)].value)
                 #     [ref, cost, num] = giveRowInfo(i,'k')
                 print(csWs['k'+ str(i)].value)
-                [ref, cost, num] = giveRowInfo(i,'k')
+                [ref, cost, num, invoice, go] = giveRowInfo(i,'k')
             else:
                 ref = 0
         elif csWs['j'+ str(i)].value != None and str(csWs['j'+ str(i)].value).lower() != 'stock':
@@ -93,13 +100,13 @@ for k in range(len(invoiceList)):
             if re.search('[B]0\d+', str(csWs['j'+ str(i)].value)) != None:
                 # count += 1
                 print(csWs['j'+ str(i)].value)
-                [ref, cost, num] = giveRowInfo(i,'j')
+                [ref, cost, num, invoice, go] = giveRowInfo(i,'j')
             else: ref = 0
         else:
             ref = 0
         if ref != 0:
-            print([ref,cost,num])
-            infoList.append([ref, cost, num])
+            print([ref,cost,num, invoice])
+            infoList.append([ref, cost, num, invoice, go])
 
     template = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\批發做單\oneraInvoice template.xlsx")
     tempWs = template.active
@@ -113,6 +120,8 @@ for k in range(len(invoiceList)):
         tempWs['b' + str(row)].value = infoList[row - 13][0]
         tempWs['e' + str(row)].value = infoList[row - 13][2]
         tempWs['g' + str(row)].value = infoList[row - 13][1]
+        tempWs['l' + str(row)].value = infoList[row - 13][3]
+        tempWs['m' + str(row)].value = infoList[row - 13][4]
         tempWs['h' + str(row)].value = "=g{}*e{}".format(row,row)
         # print(infoList[row - 13][2], int(infoList[row - 13][1]))
         totalPrice += int(infoList[row - 13][2]) * int(infoList[row - 13][1])
