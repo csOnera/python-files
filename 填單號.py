@@ -11,6 +11,15 @@ from selenium.webdriver.common.by import By
 # from webdriver_manager.chrome import ChromeDriverManager
 import time
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+JD_UN = os.getenv('JD_UN')
+JD_PW = os.getenv('JD-PW')
+
+    
 # ADD ID, MONEY
 service = Service()
 options = webdriver.ChromeOptions()
@@ -24,8 +33,9 @@ driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div[2]").click()
 
 driver.switch_to.frame('loginFrame')
 time.sleep(2)
-driver.find_element(By.ID, 'loginname').send_keys('壹时钟表-发货')
-driver.find_element(By.XPATH, '//*[@id="nloginpwd"]').send_keys('OP123456')
+
+driver.find_element(By.ID, 'loginname').send_keys(JD_UN)
+driver.find_element(By.XPATH, '//*[@id="nloginpwd"]').send_keys(JD_PW)
 
 driver.find_element(By.ID, 'paipaiLoginSubmit').click()
 
