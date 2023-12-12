@@ -24,7 +24,7 @@ for i in range(2, popwb.max_row + 1):
                 l.append(popwb["b" + str(j)].value)
                 SF = popwb["k" + str(j)].value
                 if SF == None:
-                    print('blank SF please re-entere later')
+                    print('blank SF please re-enter later')
                 boxNum = len(l)
                 break
             elif popwb["b" + str(j)].value != None:
@@ -64,12 +64,23 @@ driver.get("https://business.wtdex.com/login#/order/reservationordernew")
 
 signin = driver.find_elements(By.CLASS_NAME, "form-control")
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+POP_UN = os.getenv('POP_UN')
+POP_PW = os.getenv('POP_PW')
+PDD_UN = os.getenv('PDD_UN')
+PDD_PW = os.getenv('PDD_PW')
+
+
 if popORpdd == "pdd":
-    signin[0].send_keys("YSXGYX")
-    signin[1].send_keys("123456")
+    signin[0].send_keys(PDD_UN)
+    signin[1].send_keys(PDD_PW)
 else:
-    signin[0].send_keys("JDYSZ")
-    signin[1].send_keys("123456")
+    signin[0].send_keys(POP_UN)
+    signin[1].send_keys(POP_PW)
     
 signin[2].click()
 
