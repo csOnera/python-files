@@ -53,11 +53,19 @@ service = Service()
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=options)
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+打單UN = os.getenv('PRINT_UN')
+打單PW = os.getenv('PRINT_PW')
+
 driver.get('http://amc.wtdex.com/amc/login;jsessionid=D7DAF284BAA77F5858E9945D3FC2C1CA')
 
-driver.find_element(By.XPATH,'/html/body/div/form/div/div[2]/div/div[2]/div/div[1]/span/input').send_keys('JDYSZ')
+driver.find_element(By.XPATH,'/html/body/div/form/div/div[2]/div/div[2]/div/div[1]/span/input').send_keys(打單UN)
 driver.find_element(By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[2]/span/input').click()
-driver.find_element(By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[2]/span/input[2]').send_keys('JD123456')
+driver.find_element(By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[2]/span/input[2]').send_keys(打單PW)
 driver.find_element(By.XPATH, '//*[@id="VCode"]').click()
 # time.sleep(2)
 

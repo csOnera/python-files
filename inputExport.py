@@ -14,12 +14,19 @@ import openpyxl
 from exportExport import exportExport, runVBA
 import win32com.client
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PW = os.getenv('MYSQL_PW')
 
 connection = mysql.connector.connect(
     host='localhost',
     port='3306',
-    user='root',
-    password='jdysz',
+    user= MYSQL_USER,
+    password= MYSQL_PW,
     database='trial_database'
 )
 

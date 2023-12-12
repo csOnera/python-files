@@ -13,6 +13,21 @@ xl.Visible = True
 wb_open = True
 wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\InputInvoice.xlsx")
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PW = os.getenv('MYSQL_PW')
+
+connection = mysql.connector.connect(
+    host='localhost',
+    port='3306',
+    user= MYSQL_USER,
+    password= MYSQL_PW,
+    database='trial_database'
+)
 
 
 
@@ -26,14 +41,6 @@ while True:
         excel = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\InputInvoice.xlsx")
         sheet = excel.active
 
-
-        connection = mysql.connector.connect(
-            host='localhost',
-            port='3306',
-            user='root',
-            password='jdysz',
-            database='trial_database'
-        )
 
         cursor = connection.cursor()
 
