@@ -1,0 +1,5 @@
+*.xlsx
+*.xlsm
+chromedriver_win32
+__pycache__
+.env
