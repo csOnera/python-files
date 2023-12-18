@@ -17,7 +17,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 JD_UN = os.getenv('JD_UN')
-JD_PW = os.getenv('JD-PW')
+JD_PW = os.getenv('JD_PW')
+JDJ_UN = os.getenv('JDJ_UN')
+JDJ_PW = os.getenv('JDJ_PW')
+
+
+CHOOSE = input("enter 'jous' or 'one' to get their info")
+
+    
 
     
 # ADD ID, MONEY
@@ -34,8 +41,18 @@ driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div[2]").click()
 driver.switch_to.frame('loginFrame')
 time.sleep(2)
 
-driver.find_element(By.ID, 'loginname').send_keys(JD_UN)
-driver.find_element(By.XPATH, '//*[@id="nloginpwd"]').send_keys(JD_PW)
+if CHOOSE == 'one':
+    driver.find_element(By.ID, 'loginname').send_keys(JD_UN)
+    driver.find_element(By.XPATH, '//*[@id="nloginpwd"]').send_keys(JD_PW)
+
+elif CHOOSE == 'jous':
+    driver.find_element(By.ID, 'loginname').send_keys(JDJ_UN)
+    driver.find_element(By.XPATH, '//*[@id="nloginpwd"]').send_keys(JDJ_PW)
+    
+else:
+    print("wrong input")
+    time.sleep(5)
+    quit()
 
 driver.find_element(By.ID, 'paipaiLoginSubmit').click()
 
@@ -62,7 +79,7 @@ for i in range(1, count + 1):
         ref = re.search("[a-zA-Z.\d\-]+\Z", ref).group()
         訂單號 = table.find_element(By.XPATH, './/div[{}]/div/div[1]/table/thead/tr/th/div[1]/span[1]/a'.format(i)).text
         price = float(table.find_element(By.XPATH, './/div[{}]/div/div[2]/table/tbody/tr/td[3]/p[2]'.format(i)).text[1:])
-        infoList.append([ref, 訂單號, price])
+        infoList.append([ref, 訂單號, price, 'jous'])
         '//*[@id="order-shop-content"]/div/div/div/div[7]/div[2]/ div[2]/div/div[1]/table/thead/tr/th/div[1]/label/span'
         '//*[@id="order-shop-content"]/div/div/div/div[7]/div[2]/ div[2]/div/div[1]/table/thead/tr/th/div[1]/span[1]'
         '//*[@id="order-shop-content"]/div/div/div/div[7]/div[2]/div[3]/div/div[1]/table/thead/tr/th/div[1]/span[1]'
@@ -84,9 +101,12 @@ xl = win32com.client.Dispatch("Excel.Application")
 
 wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm")
 POP = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\出貨OR退貨紀錄\POP出貨記錄LATEST VERSION-DESKTOP-833R29B.xlsx")
-popws = POP.active
 
-for i in range(1500, popws.max_row + 1):
+startingRow = 1500
+
+popws = POP['銷售清單']
+
+for i in range(startingRow, popws.max_row + 1):
     # find the stopper
     if popws["q" + str(i)].value != None:
         j = i
@@ -104,6 +124,8 @@ for i in range(1500, popws.max_row + 1):
             popws['b' + str(j+2+k)].value = infoList[k][1]
             popws['e' + str(j+2+k)].value = infoList[k][0]
             popws['g' + str(j+2+k)].value = infoList[k][2]
+            if len(infoList) > 3:
+                popws['c' + str(j+2+k)].value = infoList[k][3]
             
         break
 
