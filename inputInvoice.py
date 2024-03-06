@@ -44,13 +44,29 @@ while True:
 
         cursor = connection.cursor()
 
+        # check if invoice in database
+        invoiceList = []
+        for i in range(2, sheet.max_row + 1):
+            if sheet['b' + str(i)].value not in invoiceList:
+                invoiceList.append(sheet['b' + str(i)].value)
+        print("invoiceList: " + str(invoiceList))
+        for inv in invoiceList:
+            cursor.execute("""
+            select * from `refInvoiceNo`
+            where `發票` = '{}';
+            """.format(inv))
+            result = cursor.fetchall()
+            if result != []:
+                choose = input("存在相同invoice, 請改一個新invoice 並重新輸入\n或輸入'continue'來追加同一invoice的庫存: ")
+                if choose != 'continue':
+                    quit()
 
         for i in range(2, sheet.max_row + 1):
             ref = sheet['a' + str(i)].value
             if ref == None:
                 print(i, sheet.max_row)
                 break
-            invoice = sheet['b' + str(i)].value   
+            invoice = sheet['b' + str(i)].value
             num = int(sheet['c' + str(i)].value)
             現退 = sheet['d' + str(i)].value
             cost = float(sheet['e' + str(i)].value)
