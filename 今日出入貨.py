@@ -78,10 +78,12 @@ def printing(date, determinator):
     print("\n========================================================\n")
 
     # check if lot sum = 0 as REMINDER
+    # update check 現貨 stock only (not counting 退貨)
     for lot in exportList:
         cursor.execute(f"""
             select sum(`數量`) from `refInvoiceNo`
-            where `發票` = '{lot}';   
+            where `發票` = '{lot}'
+            and `現貨/退貨/盒` = '現貨';   
         """)
         lotNum = cursor.fetchall()[0][0]
         if lotNum == 0:
