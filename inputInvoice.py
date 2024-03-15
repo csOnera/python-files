@@ -51,15 +51,16 @@ while True:
                 invoiceList.append(sheet['b' + str(i)].value)
         print("invoiceList: " + str(invoiceList))
         for inv in invoiceList:
-            cursor.execute("""
-            select * from `refInvoiceNo`
-            where `發票` = '{}';
-            """.format(inv))
-            result = cursor.fetchall()
-            if result != []:
-                choose = input("存在相同invoice, 請改一個新invoice 並重新輸入\n或輸入'continue'來追加同一invoice的庫存: ")
-                if choose != 'continue':
-                    quit()
+            if inv != None:
+                cursor.execute("""
+                select * from `refInvoiceNo`
+                where `發票` = '{}';
+                """.format(inv))
+                result = cursor.fetchall()
+                if result != []:
+                    choose = input("存在相同invoice, 請改一個新invoice 並重新輸入\n或輸入'continue'來追加同一invoice的庫存: ")
+                    if choose != 'continue':
+                        quit()
 
         for i in range(2, sheet.max_row + 1):
             ref = sheet['a' + str(i)].value
