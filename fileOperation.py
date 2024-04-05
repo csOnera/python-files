@@ -55,7 +55,10 @@ if __name__ == '__main__':
             try:
                 wb = openpyxl.load_workbook(newFilePath)
                 print("cs出入貨已存在")
+                wb.close()
                 time.sleep(5)
+            except PermissionError:
+                print("the excel is now opened")
             except:
                 wb = openpyxl.Workbook()
                 ws = wb.active
