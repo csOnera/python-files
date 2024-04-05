@@ -50,65 +50,72 @@ if __name__ == '__main__':
 
             import openpyxl
             newFilePath = r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\CHARMSMART "+ str(thisYear) +" 出入貨紀錄.xlsx"
-            wb = openpyxl.Workbook()
-            ws = wb.active
-            firstLine = ['日期','發票','品牌','型號','數量','公價','折扣','單價','金額','客戶','發票','折扣 (折)','金額','利潤','北京','外幣','運費/加運費後單價','JOUSTHN 雜費計算']
-            ws.title = 'active'
 
-            for i in range(len(firstLine)):
-                # check if below works 
-                ws.cell(row=1, column=i+1).value = firstLine[i]
+            # add condition if the file found
+            try:
+                wb = openpyxl.load_workbook(newFilePath)
+                print("cs出入貨已存在")
+                time.sleep(5)
+            except:
+                wb = openpyxl.Workbook()
+                ws = wb.active
+                firstLine = ['日期','發票','品牌','型號','數量','公價','折扣','單價','金額','客戶','發票','折扣 (折)','金額','利潤','北京','外幣','運費/加運費後單價','JOUSTHN 雜費計算']
+                ws.title = 'active'
 
-            ws1 = wb.create_sheet('舊貨庫存')
+                for i in range(len(firstLine)):
+                    # check if below works 
+                    ws.cell(row=1, column=i+1).value = firstLine[i]
 
-            # below import stock from local mysql as Old Stock
-            import os
-            from dotenv import load_dotenv
-            import mysql.connector
+                ws1 = wb.create_sheet('舊貨庫存')
 
-            load_dotenv()
+                # below import stock from local mysql as Old Stock
+                import os
+                from dotenv import load_dotenv
+                import mysql.connector
 
-            MYSQL_USER = os.getenv('MYSQL_USER')
-            MYSQL_PW = os.getenv('MYSQL_PW')
+                load_dotenv()
 
-            connection = mysql.connector.connect(
-                host='localhost',
-                port='3306',
-                user= MYSQL_USER,
-                password= MYSQL_PW,
-                database='trial_database'
-            )
+                MYSQL_USER = os.getenv('MYSQL_USER')
+                MYSQL_PW = os.getenv('MYSQL_PW')
 
-            cursor = connection.cursor()
+                connection = mysql.connector.connect(
+                    host='localhost',
+                    port='3306',
+                    user= MYSQL_USER,
+                    password= MYSQL_PW,
+                    database='trial_database'
+                )
 
-            oldStockFirstLine = ['id', '發票','現貨/退貨/盒','型號','數量','cost', 'cs/onera', '入貨日期']
-            
-            for i in range(len(oldStockFirstLine)):
-                # check if below works 
-                ws1.cell(row=2, column=i+1).value = oldStockFirstLine[i]
-            ws1.cell(row=2, column=10).value = '發貨'
-            ws1.cell(row=2, column=12).value = '現數量'
-            ws1.cell(row=2, column=13).value = 'price'
+                cursor = connection.cursor()
 
-            cursor.execute("""
-                select `id`, `發票`,`現貨/退貨/盒`,`型號`,`數量`,`cost`, `cs/onera`, `入貨日期` from refInvoiceNo
-                where `數量` <> 0
-                order by `發票`;
-            """)
-            result = cursor.fetchall()
-            for i in range(len(result)):
-                ws1["l" + str(i + 3)].value = result[i][4]
-            
-            for i in range(len(result)):
-                for j in range(len(oldStockFirstLine)):
-                    ws1.cell(row = i + 3, column = j + 1).value = result[i][j]
+                oldStockFirstLine = ['id', '發票','現貨/退貨/盒','型號','數量','cost', 'cs/onera', '入貨日期']
+                
+                for i in range(len(oldStockFirstLine)):
+                    # check if below works 
+                    ws1.cell(row=2, column=i+1).value = oldStockFirstLine[i]
+                ws1.cell(row=2, column=10).value = '發貨'
+                ws1.cell(row=2, column=12).value = '現數量'
+                ws1.cell(row=2, column=13).value = 'price'
 
-            wb.save(newFilePath)
+                cursor.execute("""
+                    select `id`, `發票`,`現貨/退貨/盒`,`型號`,`數量`,`cost`, `cs/onera`, `入貨日期` from refInvoiceNo
+                    where `數量` <> 0
+                    order by `發票`;
+                """)
+                result = cursor.fetchall()
+                for i in range(len(result)):
+                    ws1["l" + str(i + 3)].value = result[i][4]
+                
+                for i in range(len(result)):
+                    for j in range(len(oldStockFirstLine)):
+                        ws1.cell(row = i + 3, column = j + 1).value = result[i][j]
 
-            print('succeeded')
-            time.sleep(10)
-            exit()
+                wb.save(newFilePath)
+
+                print('succeeded')
+                time.sleep(8)
+                exit()
         else:
             print("please input valid answer")
-            time.sleep(10)
+            time.sleep(8)
 
