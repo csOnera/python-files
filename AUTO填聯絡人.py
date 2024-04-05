@@ -63,6 +63,15 @@ load_dotenv()
 
 driver.get('http://amc.wtdex.com/amc/login;jsessionid=D7DAF284BAA77F5858E9945D3FC2C1CA')
 
+# try adding a webDriverWait
+try:
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[1]/span/input'))
+    )
+except:
+    print('no response in 10 seconds, plz try again later')
+    time.sleep(10)
+    quit()
 driver.find_element(By.XPATH,'/html/body/div/form/div/div[2]/div/div[2]/div/div[1]/span/input').send_keys(打單UN)
 driver.find_element(By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[2]/span/input').click()
 driver.find_element(By.XPATH, '/html/body/div/form/div/div[2]/div/div[2]/div/div[2]/span/input[2]').send_keys(打單PW)
