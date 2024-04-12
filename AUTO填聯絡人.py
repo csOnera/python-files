@@ -143,8 +143,11 @@ if check == 'Y':
     for j in range(1000, popwb.max_row):
         if popwb['b' + str(j)].value in l and popwb['h' + str(j)].value == None and popwb['i' + str(j)].value == None:
             popwb['h' + str(j)].value = strList[3 + (l.index(popwb['b' + str(j)].value))*(5)]
+            print(strList[3 + (l.index(popwb['b' + str(j)].value))*(5)], end="  ")
             popwb['i' + str(j)].value = strList[4 + (l.index(popwb['b' + str(j)].value))*(5)]
+            print(strList[4 + (l.index(popwb['b' + str(j)].value))*(5)], end="  ")
             popwb['j' + str(j)].value = realPhoneList[phoneIndex]
+            print(realPhoneList[phoneIndex])
             phoneIndex += 1
             
     POP.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\出貨OR退貨紀錄\POP出貨記錄LATEST VERSION-DESKTOP-833R29B.xlsx")
