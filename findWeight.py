@@ -62,7 +62,7 @@ for row in range(2, ws.max_row + 1):
                 continue
 
         #     # print(title.find_element(By.XPATH, 'div/div/div/div[1]/div/div/span/a/h3').text)
-        print(findingList)
+        print(ref, findingList)
         # if findingList != {}:
         #     if list(findingList.keys())[0][0] == "H":
         #         maxChosen = max(findingList, key=findingList.get)
