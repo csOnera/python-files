@@ -22,34 +22,38 @@
         </div>
         <h1 style="font-size: 20px;">NOTES:</h1>
         <h2 style="font-size: 16px; margin-left: 10px; margin-top: -5px;">some programs' prerequisite is to close particular excel file, or errors
-        <br>某些程式的先決條件是先關閉excel, 不然有ERROR</h2>
+        <br>某些程式的先決條件是先關閉excel, 不然有ERROR
+        <br>且有時候網上取資料的程式要重試幾次, 或該網站更新後網頁架構有變(程式報廢)</h2>
 
 
         <h2>數據庫簡介:</h2>
-            <ul><b>數據庫有兩個表</b>
-                <li>refInvoiceNo 紀錄歷史全庫存(包括Invoice, 型號, 數量, 買入價 等等)</li>
+            <ul><b>數據庫有五個表</b>
+                <li>refInvoiceNo 紀錄歷史全庫存 包括出完的 (包括Invoice, 型號, 數量, 買入價 等等)</li>
                 <li>exportRecord  紀錄出貨紀錄 (包括Invoice, 型號, 數量, 去處, 賣出價 等等)</li>
+                <li>退貨紀錄 (包括input_date, 入貨單號, 出貨單號, 型號, backNum, refId, exportId, new_refId)</li>
+                <li>得賬 需於官網下載檔案並經一系列資料處理再輸入數據庫(數個得物程式) (包括引號, input_date, 型號, CAP號, 售價HKD, 對賬單號)</li>
+                <li>dewuCAP 用於對應 dd/mm/yyyy 得物 及其對應單號 (包括CAP號, exportRef)</li>
             </ul>
 
 
-        <div id="main-apps">
+        <div id="main-apps"> 
             <b><h1 style="margin-bottom: -15px; margin-top: 10px; margin-left: 8px;">主要使用應用程式:</h1></b>
             <ol>
                 <b><li><a id="special-color">
                     桌面apps
                     </a>
                 </li></b>
-                <b><li> VS Code
-                    <img src="images/vscodeLogo.jfif" alt="VS code logo">
+                <b><li> VS Code (現不推薦使用)
+                    <img src="../images/vscodeLogo.jfif" alt="VS code logo">
                 </li></b>
-                <a href="#2"><b style="color: grey"><li> MySQL Workbench (表格比較好看)
-                    <img src="images/mysqlWorkbenchLogo.jfif" alt="MySQL Workbench logo">
+                <a href="#2"><b style="color: grey"><li> MySQL Workbench (表格比較好看, 可即時修改表中資料)
+                    <img src="../images/mysqlWorkbenchLogo.jfif" alt="MySQL Workbench logo">
                 </li></b></a>
             </ol>
         </div>
 
         <br><br>
-        <img src="images/desktop.png">
+        <img src="../images/new desktop.png" style="width: 90vw;">
 
         <div class="使用方法">
             <h1>1. 使用方法 </h1>
@@ -61,53 +65,66 @@
             </h4>
             <ul>
                 <li>POP 1: 可以自動填寫POP中未留言的訂單 (但有時候京東的網頁可能進不去)</li>
-                <li>POP 2: 自動根據最新填寫的訂單號補填聯絡人資料(人名, 電話, 地址)</li>
+                <li>POP 2: 自動根據最新填寫的訂單號<b>(注意: 不包括已列印訂單)</b>補填聯絡人資料(人名, 電話, 地址)</li>
                 <li>入貨: 根據第一列在下方填寫資料, 完成後按terminal輸入指令即可</li>
                 <li>庫存: 會彈出當前庫存</li>
                 <li>出貨: 根據第一列在下方填寫資料, 完成後按terminal輸入指令即可 (<a href="#main-functions">詳細</a>)</li>
-                <li>UNDO: 可以選擇出貨號並數量, 逆轉之前的出貨紀錄 (庫存扣的, 出貨紀錄 <b>但不會逆轉出入貨的紀錄</b>)
+                <li>UNDO: 可以選擇出貨號並數量, 逆轉之前的出貨紀錄 (庫存扣的, 出貨紀錄 <b>但不會逆轉Excel的出入貨的紀錄</b>)
                     <ol>
-                        <li>除"S"外任意填寫如冇access to "exportExportRecord.xlsm"</li>
+                        <li>除"S"外任意填寫, 如當前"exportExportRecord.xlsm"的資料非逆轉對象</li>
                         <li>填寫要逆轉的第一項型號, 找出其相關紀錄 (e.g. T050.207.17.117.05)</li>
-                        <img src="./images/undotut1.png">
+                        <img src="./../images/undotut1.png">
                         <li>填入相關紀錄的"id"號碼 (圈起來的), 後填要逆轉的數量 
                             <br>
-                            (例如: 逆轉一張單就填第一個填入的型號"id"和單的型號數量/記錄數量)</li>
-                        <li>檢查清楚彈出的excel項目是否都要逆轉後, 完成後按terminal輸入指令 </li>
+                            (例如: 逆轉一整張單就填第一個填入的型號"id"和單的記錄數量)</li>
+                        <li>檢查清楚彈出的excel項目是否都要逆轉後,<b>(注意: 途中錯誤輸入可離開重填)</b> 完成後按terminal輸入指令 </li>
                     </ol>
                 </li>
                 <li>AUTO 入倉: 請先在 POP 裡填寫順豐號 (不然約倉時要後補)</li>
-                <li>如在自動輸入出入貨時忘關excel s: 可以用此重新運行auto輸入出貨紀錄</li>
-                <li>search 型號: 顯示庫存中所有該型號的紀錄 (包括賣完的)</li>
+                <li>如在自動輸入出入貨時忘關excel s: 可以用此重新運行自動輸入出貨紀錄</li>
+                <li>庫存型號: 顯示庫存中所有該型號的紀錄 (包括賣完的)</li>
                 <li>原訂單數量: 顯示該入貨單的每型號資訊 (類出入貨單)</li>
+                <li>今日出入紀錄: 顯示今天或昨天的入貨及出貨, 按'enter' 切換 (有可能錯), 可用於確認資料已存於數據庫</li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li>左邊一系列得物程式, 分別用於 (用前請先下載檔案至一資料夾並放於onedrive裡得物對賬)
+                    <ol>
+                        <li>輸入onedrive裡得物對賬裡資料夾名字, 自動將下載的檔案改名, 改編號</li>
+                        <li>輸入資料夾名字 並 交易成功的excel檔案名字(包括.xlsx), 自動於交易成功excel填入對賬單號和港幣售價</li>
+                        <li>輸入交易成功的excel檔案名字, 自動輸入該excel 資料至數據庫</li>
+                        <li>[得物寄售]: 可以查看得物單的狀況, 出貨紀錄中的得物出貨比對已輸入的對賬資料</li>
+                        <li>[得物補名]: 因[得物寄售]需要得物訂單號來比對, 此處可新增或修改得物的單號</li>
+                    </ol>
+                </li>
             </ul>
         </div>
         
-        <div class="使用方法">
-            <h1>2. 使用方法 <img src="images/vscodeLogo.jfif" alt="VS code logo"></h1>
+        <!-- <div class="使用方法">
+            <h1>2. 使用方法 <img src="../images/vscodeLogo.jfif" alt="VS code logo"></h1>
             <ol>
                 <li>打開程式
                     <br>
-                    <img src="images/打開vscode.png">
+                    <img src="../images/打開vscode.png">
                 </li>
                 <li>打開"執行總集合.py"
                     <br>
-                    <img src="images/執行總集合.png">
+                    <img src="../images/執行總集合.png">
                 </li>
                 <li>刪去("Examples:" 下的<b>其一 </b>"#") 並按右上三角形來運行
                     <br>
                     <video controls width="700px">
-                        <source src="images/runprogramRecording.mp4" type="video/mp4">
+                        <source src="../images/runprogramRecording.mp4" type="video/mp4">
                     </video>
                 </li>
                 <li>完成程式或終止程式請按下方TERMINAL 的垃圾桶圖示來結束PROGRAM (滑鼠經過時會顯示"KILL TERMINAL")
                     <br>
                     <video controls width="700px">
-                        <source src="images/killTerminal.mp4" type="video/mp4">
+                        <source src="../images/killTerminal.mp4" type="video/mp4">
                     </video>
                 </li>
             </ol>
-        </div>
+        </div> -->
 
         <div id="main-functions" class="main-functions">
             <h1>主要功能步驟</h1>
@@ -120,13 +137,13 @@
                 <li>照第一行的標題在下方輸入資料, 寄售價錢請填0 (記得刪去之前的紀錄)
                     <br>
                     <video controls width="700px">
-                        <source src="images/editExcel.mp4" type="video/mp4">
+                        <source src="../images/editExcel.mp4" type="video/mp4">
                     </video>
                 </li>
                 <li>覆查後按程式下方terminal指示確認輸入 (i.e. 輸入Y後按 Enter)
                     <br>
                     <video controls width="700px">
-                        <source src="images/terminalEnter.mp4" type="video/mp4">
+                        <source src="../images/terminalEnter.mp4" type="video/mp4">
                     </video>
                 </li>
                 <li>excel 自動彈出 </li>
@@ -159,29 +176,29 @@
 
 
         <div id="2" class="使用方法">
-            <h1>3. 使用方法 <img src="images/mysqlWorkbenchLogo.jfif" alt="MySQL Workbench logo"></h1>
+            <h1>3. 使用方法 <img src="../images/mysqlWorkbenchLogo.jfif" alt="MySQL Workbench logo"></h1>
 
             <ol>
                 <li>打開程式
                     <br>
-                    <img src="images/打開mysql.png">
+                    <img src="../images/打開mysql.png">
                 </li>
                 <li>按 "MYSQL Connections" 裡的 "Local instance MySQL80"
                     <br>
-                    <img src="images/enterDatabase.png">
+                    <img src="../images/enterDatabase.png">
                 </li>
                 <li>輸入密碼 "jdysz", 按"OK" / (keyboard) Enter</li>
             
                 <li>必需先選第一行 (USE `trial_database;`), 按閃電圖案的右一個圖案
                     <br>
                         <video controls width="700px">
-                            <source src="images/useDatabase.mp4" type="video/mp4">
+                            <source src="../images/useDatabase.mp4" type="video/mp4">
                         </video>
                 </li>
                 <li>視乎情況選第三或第五行,並按閃電圖案的右一個圖案
                     <br>
                         <video controls width="700px">
-                            <source src="images/selectAll.mp4" type="video/mp4">
+                            <source src="../images/selectAll.mp4" type="video/mp4">
                         </video>
                 </li>
             </ol>
@@ -196,7 +213,7 @@
                     >> 自動加回庫存並刪去出貨紀錄 (但不會刪去CS出入貨[EXCEL]裡的紀錄) </li>
         </ul>
     </main>
-    <footer>Created by Samuel @2023</footer>
+    <footer>Created by Samuel @2024</footer>
 </body>
 
 <script src="server.js"></script>
