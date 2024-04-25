@@ -18,6 +18,8 @@
                 <li><b>現庫存</b>(需要program 更新)[i.e. 庫存exportedStocks.xlsx]/ <b>現年度出入貨</b> [e.g. CHARMSMART 2023 出入貨紀錄.xlsx]: <br> <p>"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare"</p></li>
                 <li><b>舊庫存</b>(不同版本)/ <b>舊出入貨紀錄</b> (up to 2021 only): <br> <p>"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\以前紀錄"</p></li>
                 <li><b>得物對賬: </b><br> <p>"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\得物對賬"</p></li>
+                <li><b>京東自營鋼號 (自 27-10-2023</b> <br> <p>"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\京東自營鋼號 (自 27-10-2023.xlsx"</p></li>
+                <li><b>過往型號重量</b> <br> <p>"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\雜\過往型號重量.xlsx"</p></li>
             </ul>
         </div>
         <h1 style="font-size: 20px;">NOTES:</h1>
@@ -85,9 +87,6 @@
                 <li>庫存型號: 顯示庫存中所有該型號的紀錄 (包括賣完的)</li>
                 <li>原訂單數量: 顯示該入貨單的每型號資訊 (類出入貨單)</li>
                 <li>今日出入紀錄: 顯示今天或昨天的入貨及出貨, 按'enter' 切換 (有可能錯), 可用於確認資料已存於數據庫</li>
-                <li></li>
-                <li></li>
-                <li></li>
                 <li>左邊一系列得物程式, 分別用於 (用前請先下載檔案至一資料夾並放於onedrive裡得物對賬)
                     <ol>
                         <li>輸入onedrive裡得物對賬裡資料夾名字, 自動將下載的檔案改名, 改編號</li>
@@ -97,6 +96,34 @@
                         <li>[得物補名]: 因[得物寄售]需要得物訂單號來比對, 此處可新增或修改得物的單號</li>
                     </ol>
                 </li>
+            </ul>
+            <h3>Excel</h3>
+            <ul>
+                <li>operate Serial No. by Scanning:
+                    <ol>
+                        <li>將掃好的SKU和鋼號貼進工作表一的列A</li>
+                        <li>到工作表二按排序按鈕, 完成排序後關閉excel
+                            <video controls width="700px">
+                                <source src="../images/operateSerial.mp4" type="video/mp4">
+                            </video>
+                        </li>
+                        <li>按[UPCtoRefId]程式, 自動在excel 加入型號資料至列B</li>
+                        <li>(確認型號資料是一般格式 e.g. L1.111.1.11.1, T111.111.11.111.11, H11111111...)</li>
+                        <li>(如有重覆型號可至工作表二按相應按鈕)
+                            <video controls width="700px">
+                                <source src="../images/operateSerialRepeated.mp4" type="video/mp4">
+                            </video>
+                        </li>
+                        <li>將相應資料貼至紀錄的excel (京東自營鋼號/得物出入貨)</li>
+                    </ol>
+                </li>
+                <li>AUTO 裝箱單: 從京東自營複製資料到excel (第二行開始, 第一行為標題), 後按按鈕
+                    <video controls width="700px">
+                        <source src="../images/裝箱單.mp4" type="video/mp4">
+                    </video>
+                </li>
+                <li>AUTO 報關單: 同上, 需要後加重量至報關單; 另有[找報關重量]程式, 同樣關閉excel後自動google出該型號出現重量的次數</li>
+                <li><b>注意:</b> AUTO 裝箱單預設為每一張訂單做一次單; AUTO 報關單預設為數張訂單做一次單 (單與單中間請不要分行且於第二行開始填寫)</li>
             </ul>
         </div>
         
@@ -134,13 +161,13 @@
             <ul>
                 <li>運行程式</li>
                 <li>excel 自動彈出</li>
-                <li>照第一行的標題在下方輸入資料, 寄售價錢請填0 (記得刪去之前的紀錄)
+                <li>照第一行的標題在下方輸入資料, 寄售價錢請填采購價(非港幣) (記得刪去之前的紀錄)
                     <br>
                     <video controls width="700px">
                         <source src="../images/editExcel.mp4" type="video/mp4">
                     </video>
                 </li>
-                <li>覆查後按程式下方terminal指示確認輸入 (i.e. 輸入Y後按 Enter)
+                <li>覆查後按程式下方terminal(黑色框框)指示確認輸入 (i.e. 輸入Y後按 Enter)
                     <br>
                     <video controls width="700px">
                         <source src="../images/terminalEnter.mp4" type="video/mp4">
@@ -211,6 +238,7 @@
             <li> 因為ONEDRIVE 可以提取歷史紀錄, 可以以此得庫存紀錄</li>
             <li> Revert Program: 可以填入出貨表中的id 並數量 >> 彈出選取的紀錄 >> 如確定UNDO 按程式下方terminal指示
                     >> 自動加回庫存並刪去出貨紀錄 (但不會刪去CS出入貨[EXCEL]裡的紀錄) </li>
+            <li><a target="_blank" href="C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\samuel筆記.txt">額外隨筆</a></li>
         </ul>
     </main>
     <footer>Created by Samuel @2024</footer>
