@@ -50,7 +50,7 @@ def printing(date, determinator):
     """.format(date))
     exportTotalNum = cursor.fetchall()[0][0]
 
-    # add tmrexportRecords
+    # add tmrexportRecords (case: tdy exported ytd's stock, ytd's stock would show 0 if we check it tdy)
     cursor.execute("""
         select id, 型號, 發票, 數量, 去處, price from `exportRecord`
         where `日期` > {};
@@ -96,14 +96,14 @@ def printing(date, determinator):
 
     # 退貨
     cursor.execute("""
-        select 型號, 入貨單號, backNum, 出貨單號, new_refId from `退貨紀錄`
-        where `input_date` >= {};
+        select id, 型號, 入貨單號, backNum, 出貨單號, new_refId from `退貨紀錄`
+        where `input_date` = {};
     """.format(date))
     list = cursor.fetchall()
 
     cursor.execute("""
         select sum(`backNum`) from `退貨紀錄`
-        where `input_date` >= {};
+        where `input_date` = {};
     """.format(date))
     exportTotalNum = cursor.fetchall()[0][0]
 
@@ -111,6 +111,7 @@ def printing(date, determinator):
         print(f'{"今日" if determinator == 1 else "昨日"}未有退貨入\n')
     else:
         for i in list:
+            todaysStock.append(i)
             print(i)
 
     print(f'{"今日" if determinator == 1 else "昨日"}退貨總數: ', end="")
@@ -120,7 +121,8 @@ def printing(date, determinator):
     # 入貨
     cursor.execute("""
         select id, 型號, 發票, 數量, `現貨/退貨/盒`, cost, `cs/onera` from `refInvoiceNo`
-        where `入貨日期` = {};
+        where `入貨日期` = {}
+        and `現貨/退貨/盒` = '現貨';
     """.format(date))
     list = cursor.fetchall()
 
