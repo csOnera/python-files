@@ -71,7 +71,7 @@
                 <li>入貨: 根據第一列在下方填寫資料, 完成後按terminal輸入指令即可</li>
                 <li>庫存: 會彈出當前庫存</li>
                 <li>出貨: 根據第一列在下方填寫資料, 完成後按terminal輸入指令即可 (<a href="#main-functions">詳細</a>)</li>
-                <li>UNDO: 可以選擇出貨號並數量, 逆轉之前的出貨紀錄 (庫存扣的, 出貨紀錄 <b>但不會逆轉Excel的出入貨的紀錄</b>)
+                <li>UNDO: 可以選擇出貨號並數量, 輸出該出貨紀錄, 可選擇是否逆轉之前的出貨紀錄 (庫存扣的, 出貨紀錄 <b>但不會逆轉Excel的出入貨的紀錄</b>)
                     <ol>
                         <li>除"S"外任意填寫, 如當前"exportExportRecord.xlsm"的資料非逆轉對象</li>
                         <li>填寫要逆轉的第一項型號, 找出其相關紀錄 (e.g. T050.207.17.117.05)</li>
@@ -216,7 +216,7 @@
                 </li>
                 <li>輸入密碼 "jdysz", 按"OK" / (keyboard) Enter</li>
             
-                <li>必需先選第一行 (USE `trial_database;`), 按閃電圖案的右一個圖案
+                <li><b>**開啟此數據庫後**</b>必需先選第一行 (USE `trial_database;`), 按閃電圖案的右一個圖案
                     <br>
                         <video controls width="700px">
                             <source src="../images/useDatabase.mp4" type="video/mp4">
@@ -228,7 +228,70 @@
                             <source src="../images/selectAll.mp4" type="video/mp4">
                         </video>
                 </li>
+                <!-- 一些常用的複雜指令 -->
+                <!-- 輸出整張表格 -->
+                <h3></h3>
+                <li>
+                    輸出整張表格
+                    <pre>
+                        <code>
+                            select * from `表格名稱`;
+
+                            或者最新的紀錄排前面
+
+                            select * from `表格名稱`
+                            order by `id` desc;
+                        </code>
+                    </pre>
+                </li>
+                <!-- 輸出批發資料 (連同成本) -->
+                <li>
+                    輸出批發資料 (連同成本)
+                    <pre>
+                        <code>
+                            select `exportRecord`.*, `cost` from `exportRecord`
+                            join `refInvoiceNo` 
+                            on `ref_id` = `refInvoiceNo`.`id`
+                            where `去處` LIKE 'c%'
+                            order by `去處`;
+
+                            變項:
+                            第四行中'c%' 代表搜尋所有[去處]有'c'開頭的紀錄, '%'代表任意文字(不限數量);
+                            所以如果要找D開頭的批發單, 第四行該為:
+                            where `去處` LIKE 'd%'
+                        </code>
+                    </pre>
+                </li>
+                <!-- 輸出連成本的出貨數據 -->
+                <li>
+                    輸出連成本的出貨數據
+                    <pre>
+                        <code>
+                            京東自營:
+                            select `exportRecord`.*, `cost` from `exportRecord`
+                            join `refInvoiceNo` 
+                            on `ref_id` = `refInvoiceNo`.`id`
+                            where `去處` rLIKE '^[0-9]{10,11}';
+
+                            '^[0-9]{10,11}' 指10位或11位的數字
+
+                            得物:
+                            select `exportRecord`.*, `cost` from `exportRecord`
+                            join `refInvoiceNo` 
+                            on `ref_id` = `refInvoiceNo`.`id`
+                            where `去處` like '%得%';
+
+                            POP:
+                            select `exportRecord`.*, `cost` from `exportRecord`
+                            join `refInvoiceNo` 
+                            on `ref_id` = `refInvoiceNo`.`id`
+                            where `去處` like '%POP%';
+
+                        </code>
+                    </pre>
+                </li>
             </ol>
+
         </div>
         
 
