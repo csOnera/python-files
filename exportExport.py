@@ -20,7 +20,7 @@ def exportExport(Q, NumItem = 0, skipAskingId = 0):
         else:
             id = skipAskingId
         NumItem = int(input('No. of items (integer)'))
-        if id <= 670:
+        if id <= 2998:
             print("No access to previous records")
             while True:
                 toquit = input("type 'quit' to quit: ")
@@ -39,7 +39,11 @@ def exportExport(Q, NumItem = 0, skipAskingId = 0):
         sheet.delete_rows(2, sheet.max_row)
 
     except:
-        excel = openpyxl.Workbook()
+        # excel = openpyxl.Workbook()
+        print("please close exportExportRecords before running the app")
+        import time
+        time.sleep(5)
+        quit()
 
     sheet = excel.active
 
@@ -119,7 +123,7 @@ def runVBA():
     xl.Visible = True
     wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm")
 
-    confirm = input("CHECK THE EXCEL SHEET & 'C' to auto plug-in records to CS 出入貨 2022/2023")
+    confirm = input("CHECK THE EXCEL SHEET & 'C' to auto plug-in records to CS 出入貨 ")
 
     if confirm == 'C':
         year = read_file()

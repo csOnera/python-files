@@ -47,6 +47,18 @@ errorL = []
 
 if confirm == 'Y':
     wb.Close(False)
+    try:
+        eerCheck = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm", read_only=False, keep_vba=True)
+        eerCheck.close()
+
+    except:
+        # excel = openpyxl.Workbook()
+        print("please close exportExportRecords before running the app")
+        import time
+        time.sleep(5)
+        quit()
+
+
     excel = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\InputExport.xlsx")
     sheet = excel.active
     
