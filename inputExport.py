@@ -90,6 +90,12 @@ if confirm == 'Y':
                 price = 0
             else:
                 price = float(price)
+            
+            if to == None:
+                print("請填寫所有空格")
+                import time
+                time.sleep(3)
+                quit()
 
             # new update that add choice of selecting
             if undefault != None:
