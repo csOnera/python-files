@@ -37,7 +37,7 @@ for file in folder:
             notFoundList.append(filews["b" + str(row)].value)
         else:
             print("none type detected")
-    print(file.name, "notFoundNumber訂單號找不到數量 (包括倉儲費):", notFoundCount, "下為找不到的訂單號")
+    print(str(filews.max_row-3-notFoundCount) + "/" + str(filews.max_row-3),file.name, "notFoundNumber訂單號找不到數量 (包括倉儲費):", notFoundCount, "下為找不到的訂單號")
     for notFound in notFoundList:
         print(notFound)
 
@@ -45,3 +45,7 @@ for file in folder:
 
 
 addingExcel.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\得物對賬/" + wb_path)
+
+print("succeeded")
+while True:
+    pass

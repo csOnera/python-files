@@ -22,20 +22,37 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 
-# here enter the loading sheet
-wb_path = r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\得物對賬//" + input("please input the 交易成功 name\ne.g. xxx.xlsx : ")
+# ask all belonging columns 
+print("請輸入表格中項目的列\ne.g. A/B/C...:  ")
+引號col = input("引號col: ")
+型號col = input("型號col: ")
+CAP號col = input("CAP號col: ")
+售價HKDcol = input("售價HKDcol: ")
+對賬單號col = input("對賬單號col: ")
 
-excel = openpyxl.load_workbook(wb_path)
+# here enter the loading sheet
+wb_path = r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\得物對賬//" + input("請關閉EXCEL後 輸入 交易成功 EXCEL名稱\ne.g. xxx.xlsx : ")
+try:
+    excel = openpyxl.load_workbook(wb_path)
+except:
+    print("請先關閉相關excel文檔")
+    check = input("關閉相關excel文檔後輸入'Y'來繼續:  ")
+    if check == 'Y':
+        # continue
+        excel = openpyxl.load_workbook(wb_path)
+        
 ws = excel.active
 
 for i in range(2, ws.max_row):
     if ws["c" + str(i)].value != None and ws["w" + str(i)].value != None:
         # bug by 引號 lol
-        引號 = ws["c" + str(i)].value[1:]
-        型號 = ws["h" + str(i)].value
-        CAP號 = ws["t" + str(i)].value
-        售價HKD = float(ws["n" + str(i)].value)
-        對賬單號 = ws["w" + str(i)].value
+        # 引號 the primary key (so prob will get bug when inserting the same item)
+        
+        引號 = ws[引號col + str(i)].value[1:]
+        型號 = ws[型號col + str(i)].value
+        CAP號 = ws[CAP號col + str(i)].value
+        售價HKD = float(ws[售價HKDcol + str(i)].value)
+        對賬單號 = ws[對賬單號col + str(i)].value
 
         # print("""insert into `得賬` (`引號`, `型號`, `CAP號`, `售價HKD`, `對賬單號`) values 
         #       ('{}', '{}', '{}', {});"""
@@ -43,11 +60,17 @@ for i in range(2, ws.max_row):
         #         引號, 型號, CAP號, 售價HKD
         #     ))
 
-        cursor.execute("""insert into `得賬` (`引號`, `型號`, `CAP號`, `售價HKD`, `對賬單號`) 
+        # added description for forseeable error of same 業務單號
+        try:
+            cursor.execute("""insert into `得賬` (`引號`, `型號`, `CAP號`, `售價HKD`, `對賬單號`) 
                        VALUES ('{}', '{}', '{}', {}, '{}');
                        """.format(
                            引號, 型號, CAP號, 售價HKD, 對賬單號
                        ))
+            print("成功輸入單號資料: " + str(引號))
+        except:
+            print('error: 可能存在重覆業務單號: ' + str(引號))
+            continue
 print("data added")
 
 excel.save(wb_path)
@@ -55,3 +78,6 @@ excel.save(wb_path)
 cursor.close()
 connection.commit()
 connection.close()
+
+while True:
+    pass
