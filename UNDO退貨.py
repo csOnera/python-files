@@ -33,6 +33,7 @@ ref = input('請輸入要查找型號或輸入"quit"退出查找')
 if ref == "quit":
     quit()
 else:
+    print("id, input_date, 入貨單號, 出貨單號, 型號, backNum, refId, exportId, new_refId")
     idList = []
     cursor.execute("""
         select * from `退貨紀錄`
@@ -49,7 +50,7 @@ undoId = 0
 while undoId not in idList:
     undoId = int(input("id (integer)"))
 
-amoutOfUndo = int(input("number of items to UNDO"))
+amoutOfUndo = int(input("例子: 如要undo id為301,302,303,304的紀錄則先輸入301, 現在輸入退貨項目數量輸入 4(四個紀錄)\n請輸入要UNDO的項目數量\nnumber of items to UNDO"))
 
 cursor.execute("""
     select * from `退貨紀錄`
@@ -83,7 +84,7 @@ xl.Visible = True
 wb_open = True
 wb = xl.Workbooks.Open(backExcelPath)
 
-checked = input('CHECK items to be reverted in the input退貨.xlsm "checked"')
+checked = input('請檢查清楚excel檔的資料, 如無問題可輸入"checked"來還原出貨紀錄\nCHECK items to be reverted in the input退貨.xlsm "checked"')
 # while True:
 if checked == "checked" :
     wb.Close(False)
@@ -115,13 +116,19 @@ if checked == "checked" :
             select `數量` from `exportRecord`
             where `id` = '{}';
         """.format(exportId))
-        NumInExport = cursor.fetchall()[0][0]
-        cursor.execute("""
-            update `exportRecord`
-            set `數量` = '{}'
-            where `id` = '{}';
-        """.format(NumInExport + numAddBack, exportId))
 
+        try:
+            NumInExport = cursor.fetchall()[0][0]
+        
+            cursor.execute("""
+                update `exportRecord`
+                set `數量` = '{}'
+                where `id` = '{}';
+            """.format(NumInExport + numAddBack, exportId))
+        except:
+            print("冇相關出貨紀錄\nno export record found")
+            pass
+        
         # last to delete the records in `退貨紀錄`
         cursor.execute("""
             delete from `退貨紀錄`

@@ -39,7 +39,7 @@ wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraSha
 
 
 
-confirm = input(' EXCEL sheet entered? "Y"')
+confirm = input('請檢查清楚excel表,確認請輸入"Y"\nEXCEL sheet entered? "Y" ')
 autoNum = 0
 priceStr = ''
 lastStockL = []
@@ -53,7 +53,7 @@ if confirm == 'Y':
 
     except:
         # excel = openpyxl.Workbook()
-        print("please close exportExportRecords before running the app")
+        print("請先關閉exportExportRecords excel檔\nplease close exportExportRecords before running the app")
         import time
         time.sleep(5)
         quit()
@@ -100,7 +100,7 @@ if confirm == 'Y':
             # new update that add choice of selecting
             if undefault != None:
                 # check if there is / if only one source
-                cursor.execute("select * from `refInvoiceNo` where `發票` like '{}%' and `型號` = '{}' and `數量` <> 0;".format(undefault, ref))
+                cursor.execute("select `型號`, `發票`, `數量`, `現貨/退貨/盒` from `refInvoiceNo` where `發票` like '{}%' and `型號` = '{}' and `數量` <> 0;".format(undefault, ref))
                 result = cursor.fetchall()
 
                 if result == []:
@@ -109,7 +109,7 @@ if confirm == 'Y':
                 if len(result) >= 1:
                     for item in result:
                         print(item)
-                    checkInvoice = input("有沒有非選擇的發票紀錄? (Y/N): ")
+                    checkInvoice = input("如發票沒有錯請填'N', 不然請填'Y': ")
                     if checkInvoice == "Y":
                         errorL.append('存在非選擇發票: {}'.format(ref))
                         # may select the id
@@ -176,9 +176,9 @@ if confirm == 'Y':
 
             # print('totalNum: ',totalNum)
             if takingNum > totalNum:
-                print('{} not enough stock, {} left.'.format(ref, totalNum))
+                print('{} not enough stock (庫存不足), {} left(剩餘數量).'.format(ref, totalNum))
                 if totalNum != 0:
-                    stillTake = input("want to export even not enough stock?'Y'")
+                    stillTake = input("請問仍要輸出不足的數量嗎\nwant to export even not enough stock?'Y'")
                     if stillTake == 'Y':
                         # print(autoNum)
                         takingNum = totalNum
@@ -321,6 +321,6 @@ import RefreshRecord
 RefreshRecord
 
 while True:
-    quitT = input('type "quit" to quit terminal')
+    quitT = input('可輸入"quit"來退出或按視窗的"X"\ntype "quit" to quit terminal')
     if quitT == "quit":
         quit()

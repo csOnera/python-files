@@ -32,7 +32,7 @@ connection = mysql.connector.connect(
 
 
 while True:
-    confirm = input(' EXCEL sheet entered? "Y"')
+    confirm = input('請檢查清楚excel表,確認請輸入"Y"\nEXCEL sheet entered? "Y"')
     if confirm == "Y":
         wb.Close(False)
         # below line new added
@@ -69,20 +69,26 @@ while True:
                 break
             invoice = sheet['b' + str(i)].value
             num = int(sheet['c' + str(i)].value)
-            現退 = sheet['d' + str(i)].value
-            cost = float(sheet['e' + str(i)].value)
-            csorone = sheet['f' + str(i)].value
+            # 現退 = sheet['d' + str(i)].value
+            cost = float(sheet['d' + str(i)].value)
+            csorone = sheet['e' + str(i)].value
+            if invoice == None or csorone == None:
+                print("請填寫所有空格")
+                import time
+                time.sleep(3)
+                quit()
+                
 
 
             cursor.execute("""
             insert into `refInvoiceNo` (`型號`, `發票`, `數量`, `現貨/退貨/盒`, `cost`, `cs/onera`, `入貨日期`) 
-            values ('{}', '{}', '{}', '{}', '{}', '{}', curdate());
+            values ('{}', '{}', '{}', '現貨', '{}', '{}', curdate());
                         
             """.format(
-                ref, invoice, num, 現退, cost, csorone
+                ref, invoice, num, cost, csorone
             ))
 
-        print("succeeded inputting stock!!")
+        print("成功輸入庫存\nsucceeded inputting stock!!")
             
 
         excel.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\InputInvoice.xlsx")

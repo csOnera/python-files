@@ -20,7 +20,7 @@ def exportExport(Q, NumItem = 0, skipAskingId = 0):
         else:
             id = skipAskingId
         NumItem = int(input('No. of items (integer)'))
-        if id <= 2998:
+        if id <= 2850:
             print("No access to previous records")
             while True:
                 toquit = input("type 'quit' to quit: ")
@@ -40,7 +40,7 @@ def exportExport(Q, NumItem = 0, skipAskingId = 0):
 
     except:
         # excel = openpyxl.Workbook()
-        print("please close exportExportRecords before running the app")
+        print("請先關閉exportExportRecords 的excel檔案\nplease close exportExportRecords before running the app")
         import time
         time.sleep(5)
         quit()
@@ -105,7 +105,7 @@ def exportExport(Q, NumItem = 0, skipAskingId = 0):
 
 
 
-    print("succeeded!")
+    print("成功 succeeded!")
 
     excel.save(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm")
 
@@ -123,7 +123,7 @@ def runVBA():
     xl.Visible = True
     wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm")
 
-    confirm = input("CHECK THE EXCEL SHEET & 'C' to auto plug-in records to CS 出入貨 ")
+    confirm = input("請檢查清楚從數據庫中導出的excel檔案的資料,如無誤可輸入'C'以自動填入出貨紀錄至出入貨excel表\nCHECK THE EXCEL SHEET & 'C' to auto plug-in records to CS 出入貨 ")
 
     if confirm == 'C':
         year = read_file()

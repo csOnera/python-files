@@ -28,7 +28,7 @@ xl.Visible = True
 wb_open = True
 wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\input退貨.xlsx")
 
-confirm = input(' EXCEL sheet entered? "Y"')
+confirm = input('請檢查清楚excel表,確認請輸入"Y"\nEXCEL sheet entered? "Y" ')
 
 if confirm == 'Y':
     wb.Close(True)
@@ -80,7 +80,7 @@ if confirm == 'Y':
         exportId = 0
 
         while exportId not in idEnsureList:
-            exportId = input('input the exportId (or "null" if not found)... \nMake sure type the id shown')
+            exportId = input('請輸入出貨紀錄的id來創建退貨紀錄\n如系統冇相關出貨紀錄則填"null"\ninput the exportId (or "null" if not found)... \nMake sure type the id shown')
 
         os.system('cls')
         if exportId != "null":
@@ -90,7 +90,7 @@ if confirm == 'Y':
             cursor.execute("""select * from exportRecord where id = '{}';""".format(exportId))
             result = cursor.fetchall()[0]
             if result[4] < num:
-                print('選取的出貨紀錄數量不足, 請核對數量以繼續\n當前退回數量為: {}'.format(num))
+                print('選取的出貨紀錄數量不足, 請核對數量以繼續\n剛剛輸入的需重新輸入\n當前退回數量為: {}'.format(num))
                 while num > 0:
                     print('選取的出貨紀錄數量不足, 開始迴圈\n現在剩餘數量: {}'.format(num))
 
@@ -102,14 +102,14 @@ if confirm == 'Y':
                     exportRecords = cursor.fetchall()
                     print(ref, num, outputInvoice)
 
-                    print("id", "發票", "數量", "去處", "ref_id")
+                    print("id", "發票", "數量", "去處", "ref_id (冇用資料)")
                     for i in exportRecords:
                         print(i)
 
                     exportId = 0
 
                     while exportId not in idEnsureList:
-                        exportId = input('input the exportId (or "null" if not found)... \nMake sure type the id shown')
+                        exportId = input('請確認輸入存在的出貨id\n如系統冇相關出貨紀錄則填"null"\ninput the exportId (or "null" if not found)... \nMake sure type the id shown')
 
                     idEnsureList.remove(exportId)
                     cursor.execute("""select * from exportRecord where id = '{}';""".format(exportId))
@@ -283,13 +283,16 @@ if confirm == 'Y':
                 values (curdate(), '{}', '{}', '{}', '{}', '{}', '{}');
             """.format(inputInvoice, outputInvoice, ref, num, maxid, maxid))
         
-    print("database done! ")
+    print("成功輸入數據庫\ndatabase done! ")
     connection.commit()
 
 
     eer = openpyxl.load_workbook(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm", read_only=False, keep_vba=True)
     eerws = eer.active
-    eerws.delete_rows(2, sheet.max_row)
+
+    # below line not functioning (corrected...to be tested)
+    eerws.delete_rows(2, eerws.max_row)
+
     # xl.Application.Run('exportExportRecords.xlsm!Module5.ClearRows')
 
     # export the last 退貨紀錄

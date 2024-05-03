@@ -7,19 +7,11 @@ import win32com.client
 from exportExport import exportExport, runVBA
 
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-MYSQL_USER = os.getenv('MYSQL_USER')
-MYSQL_PW = os.getenv('MYSQL_PW')
-
 connection = mysql.connector.connect(
     host='localhost',
     port='3306',
-    user= MYSQL_USER,
-    password= MYSQL_PW,
+    user='root',
+    password='jdysz',
     database='trial_database'
 )
 
@@ -29,7 +21,7 @@ cursor = connection.cursor()
 # first to add back the number in `refInvoiceNo`
 # get the invoice and ref from `exportRecords`
 
-needExport = input('is export record done? "S" to skip exporting again')
+needExport = input('如匯出的出貨紀錄已存在,請輸入"S";\n 否則請按(enter)並完成匯出的步驟\nis export record done? "S" to skip exporting again')
 if needExport != "S":
     ref = input('請輸入要查找型號或輸入"quit"退出查找')
 
@@ -49,8 +41,9 @@ if needExport != "S":
             idList.append(i[0])
     undoId = 0
     while undoId not in idList:
-        undoId = int(input("id (integer)"))
+        undoId = int(input("請輸入出貨紀錄的id (integer): "))
 
+    print("例子: 如要undo id為301,302,303,304的紀錄則先輸入301, 現在輸入退貨項目數量輸入 4(四個紀錄)\n下輸入要UNDO的項目數量")
     exportExport("id",skipAskingId=undoId)
     
 xl = win32com.client.Dispatch("Excel.Application")
@@ -60,7 +53,7 @@ wb_open = True
 wb = xl.Workbooks.Open(r"C:\Users\onera\OneDrive - ONE ERA (HK) LIMITED\oneraShare\DATABASE_TRIAL\python files\exportExportRecords.xlsm")
 
 
-checked = input('CHECK items to be reverted in the exportExport.xlsm "checked"')
+checked = input('請檢查清楚excel檔的資料, 如無問題可輸入"checked"來還原出貨紀錄\nCHECK items to be reverted in the exportExport.xlsm "checked"')
 # while True:
 if checked == "checked" :
     wb.Close(False)
